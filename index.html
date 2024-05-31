@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <script src="//cdn.jsdelivr.net/npm/eruda"></script>
+      
+      <h3>made by Ronan</h3>
+  <title>xoxo</title>
+  <style>
+    .row div {
+      padding: 10px;
+      border: 3px solid blue;
+      height: 75px;
+      width: 75px;
+      background-color: white;
+      color: blue;
+      text-align: center;
+      font-size: 32px;
+      float: left;
+    }
+    .row {
+      clear: both;
+    }
+   
+#aisay{
+    overflow: scroll;
+    background:#3DE3C0;
+    width: 400px;
+    height: 250px;
+}
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+  </style>
+  </head>
+<body>
+    <h1>AI v4 with response</h1>
+     <span style="font-size:50px;cursor:pointer; float: Right;" onclick="openNav()">&#9776;</span>
+   
+  
+  
+  <label class="switch">
+  <input type="checkbox" id="aifirst"onclick=aicheckiffirst()>
+  <span class="slider"></span></label><p>ai goes first if switch on </p>
+  <div id="aisay">
+      
+  </div>
+  <div>
+    <div class="row">
+        
+      <div id="0_0" onclick="place(this)"></div>
+      <div id="1_0" onclick="place(this)"></div>
+      <div id="2_0" onclick="place(this)"></div>
+      
+      
+    </div>
+    <div class="row">
+      <div id="0_1" onclick="place(this)"></div>
+      <div id="1_1" onclick="place(this)"></div>
+      <div id="2_1" onclick="place(this)"></div>
+      
+    </div>
+    <div class="row">
+      <div id="0_2" onclick="place(this)"></div>
+      <div id="1_2" onclick="place(this)"></div>
+      <div id="2_2" onclick="place(this)"></div>
+      
+    </div>
+
+    </div>
+  </div>
+  <script>
+    var intervalforcheckdraw=setInterval(checkifdraw,10)
+    var last_play=""
+    var currentPlayer = "X";
+    var aiwentfirst=0
+    checkifdraw()
+    //aioffence()
+    var won = false;
+    function place(box) {
+      if(box.innerText != "" || won) return;
+      box.innerText = currentPlayer;
+      checkGameBoard()
+      aioffence()
+      aiwentfirst=1
+      
+      document.getElementById("currentplayer").innerHTML=currentPlayer;
+      
+      
+    }
+      
+    
+       
+    
+    function aicheckiffirst(){
+        if (aiwentfirst==0 && document.getElementById("aifirst").checked){
+           aioffence() 
+           aiwentfirst=1
+           won=false
+        }
+        else if (aiwentfirst==1 && document.getElementById("aifirst").checked === false){
+            cleardiv()
+            aiwentfirst=0
+        }
+    }
+    function cleardiv(){
+        document.getElementById("0_0").innerHTML=""
+        document.getElementById("1_0").innerHTML=""
+        document.getElementById("2_0").innerHTML=""
+        document.getElementById("0_1").innerHTML=""
+        document.getElementById("1_1").innerHTML=""
+        document.getElementById("2_1").innerHTML=""
+        document.getElementById("0_2").innerHTML=""
+        document.getElementById("1_2").innerHTML=""
+        document.getElementById("2_2").innerHTML=""
+        
+    }
+    function checkGameBoard() {
+      for(var i = 0; i <= 2; i++) {
+        checkWinner(document.getElementById(i + "_0").innerText,
+          document.getElementById(i + "_1").innerText,
+          document.getElementById(i + "_2").innerText);
+        checkWinner(document.getElementById("0_" + i).innerText,
+          document.getElementById("1_" + i).innerText,
+          document.getElementById("2_" + i).innerText);  
+      }
+      checkWinner(document.getElementById("0_0").innerText,
+        document.getElementById("1_1").innerText,
+        document.getElementById("2_2").innerText);
+      checkWinner(document.getElementById("0_2").innerText,
+        document.getElementById("1_1").innerText,
+        document.getElementById("2_0").innerText);
+        
+    }
+    
+    function checkWinner(first, second, third) {
+      if(first != "" && first=="X" && first == second && first == third && draw!=1 && won==false) {
+        alert("You won");
+        var msgforplayerwin = document.createElement("p");
+        msgforplayerwin.innerHTML = "AI: Noooo how did you win,ONLY THIS TIME NEXT TIME I WILL BEAT YOU";
+        document.getElementById("aisay").appendChild(msgforplayerwin);
+    
+        
+        
+        won = true;
+      }
+      else if (first != "" && first=="O" && first == second && first == third && draw!=1 && won==false) {
+        
+        var msgforaiwin = document.createElement("p");
+        msgforaiwin.innerHTML = "AI: HAHA i won, you just have a skill issue";
+        document.getElementById("aisay").appendChild(msgforaiwin);
+        alert("Winner is Ai");
+       
+        won = true;
+      }
+      else{
+          
+      }
+    }
+    
+    function openNav() {
+    document.getElementById("mySidenav").style.width = "400px";
+    document.getElementById("main").style.marginRight = "400px";
+  }
+  function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+    document.getElementById("main").style.marginRight= "0";
+  }
+  var defencearray=['haha lol.', 'haha nun uh ' ,' lol no tricking me', 'nope i saw that']
+function generatedefenceword(){
+    var defenceword = defencearray[Math.floor(Math.random() * defencearray.length)];
+    var msgfordefence = document.createElement("p");
+    msgfordefence.innerHTML = "AI: Blocked you " + defenceword;
+    document.getElementById("aisay").appendChild(msgfordefence);
+}
+var offencearray=['Try to beat this lol', 'Ohh found one','Hehe what are you gonna do now', 'im gonna win', 'Tricky...']
+function generateoffenceword(){
+    var offenceword = offencearray[Math.floor(Math.random() * defencearray.length)];
+    var msgforoffence = document.createElement("p");
+    msgforoffence.innerHTML = "AI:" + defenceword;
+    document.getElementById("aisay").appendChild(msgforoffence);
+}
+  
+  
+  
+  function aicheckwin(){
+      
+       //checks the \ line 
+      if (document.getElementById("0_0").innerText=="X" && document.getElementById("1_1").innerText=="X" && document.getElementById("2_2").innerText==""){
+          document.getElementById("2_2").innerHTML="O"
+          
+          generatedefenceword()
+      }
+      else if (document.getElementById("2_2").innerText=="X" && document.getElementById("1_1").innerText=="X" && document.getElementById("0_0").innerText==""){
+          document.getElementById("0_0").innerHTML="O"
+          
+          generatedefenceword()
+      }
+      else if (document.getElementById("0_0").innerText=="X" && document.getElementById("2_2").innerText=="X" && document.getElementById("1_1").innerText==""){
+          document.getElementById("1_1").innerHTML="O"
+          
+          generatedefenceword()
+      }
+      //checks the / line 
+      else if (document.getElementById("2_0").innerText=="X" && document.getElementById("1_1").innerText=="X" && document.getElementById("0_2").innerText==""){
+          document.getElementById("0_2").innerHTML="O"
+          
+          generatedefenceword()
+      }
+      else if (document.getElementById("0_2").innerText=="X" && document.getElementById("1_1").innerText=="X" && document.getElementById("2_0").innerText==""){
+          document.getElementById("2_0").innerHTML="O"
+          
+          generatedefenceword()
+      }
+      else if (document.getElementById("0_2").innerText=="X" && document.getElementById("2_0").innerText=="X" && document.getElementById("1_1").innerText==""){
+          document.getElementById("1_1").innerHTML="O"
+          
+          generatedefenceword()
+      }
+      //checks the first line horizontally
+      else if (document.getElementById("0_0").innerText=="X" && document.getElementById("1_0").innerText=="X" && document.getElementById("2_0").innerText==""){
+          document.getElementById("2_0").innerHTML="O"
+          
+          generatedefenceword()
+      }
+      else if (document.getElementById("2_0").innerText=="X" && document.getElementById("1_0").innerText=="X" && document.getElementById("0_0").innerText==""){
+          document.getElementById("0_0").innerHTML="O"
+          
+          generatedefenceword()
+      }
+      else if (document.getElementById("0_0").innerText=="X" && document.getElementById("2_0").innerText=="X" && document.getElementById("1_0").innerText==""){
+          document.getElementById("1_0").innerHTML="O"
+          
+          generatedefenceword()
+      }
+      //checks the second line horizontally
+      else if (document.getElementById("0_1").innerText=="X" && document.getElementById("1_1").innerText=="X" && document.getElementById("2_1").innerText==""){
+          document.getElementById("2_1").innerHTML="O"
+          
+          generatedefenceword()
+      }
+      else if (document.getElementById("2_1").innerText=="X" && document.getElementById("1_1").innerText=="X" && document.getElementById("0_1").innerText==""){
+          document.getElementById("0_1").innerHTML="O"
+          
+          generatedefenceword()
+      }
+      else if (document.getElementById("0_1").innerText=="X" && document.getElementById("2_1").innerText=="X" && document.getElementById("1_1").innerText==""){
+          document.getElementById("1_1").innerHTML="O"
+          
+          generatedefenceword()
+      }
+      //checks the third line horizontally
+      else if (document.getElementById("0_2").innerText=="X" && document.getElementById("1_2").innerText=="X" && document.getElementById("2_2").innerText==""){
+          document.getElementById("2_2").innerHTML="O"
+          
+          generatedefenceword()
+      }
+      else if (document.getElementById("1_2").innerText=="X" && document.getElementById("2_2").innerText=="X" && document.getElementById("0_2").innerText==""){
+          document.getElementById("0_2").innerHTML="O"
+          
+          generatedefenceword()
+      }
+      else if (document.getElementById("0_2").innerText=="X" && document.getElementById("2_2").innerText=="X" && document.getElementById("1_2").innerText==""){
+          document.getElementById("1_2").innerHTML="O"
+          
+          generatedefenceword()
+      }
+      //checks the first line vertically  
+      else if (document.getElementById("0_0").innerText=="X" && document.getElementById("0_1").innerText=="X" && document.getElementById("0_2").innerText==""){
+          document.getElementById("0_2").innerHTML="O"
+          
+          generatedefenceword()
+      }
+      else if (document.getElementById("0_2").innerText=="X" && document.getElementById("0_1").innerText=="X" && document.getElementById("0_0").innerText==""){
+          document.getElementById("0_0").innerHTML="O"
+          
+          generatedefenceword()
+      }
+      else if (document.getElementById("0_0").innerText=="X" && document.getElementById("0_2").innerText=="X" && document.getElementById("0_1").innerText==""){
+          document.getElementById("0_1").innerHTML="O"
+          
+          generatedefenceword()
+      }
+      //checks the second line vertically
+      else if (document.getElementById("1_0").innerText=="X" && document.getElementById("1_1").innerText=="X" && document.getElementById("1_2").innerText==""){
+          document.getElementById("1_2").innerHTML="O"
+          
+          generatedefenceword()
+      }
+      else if (document.getElementById("1_2").innerText=="X" && document.getElementById("1_1").innerText=="X" && document.getElementById("1_0").innerText==""){
+          document.getElementById("1_0").innerHTML="O"
+          
+          generatedefenceword()
+      }
+      else if (document.getElementById("1_2").innerText=="X" && document.getElementById("1_0").innerText=="X" && document.getElementById("1_1").innerText==""){
+          document.getElementById("1_1").innerHTML="O"
+          
+          generatedefenceword()
+      }
+      //checks the third line vertically 
+      else if (document.getElementById("2_0").innerText=="X" && document.getElementById("2_1").innerText=="X" && document.getElementById("2_2").innerText==""){
+          document.getElementById("2_2").innerHTML="O"
+          
+          generatedefenceword()
+      }
+      else if (document.getElementById("2_2").innerText=="X" && document.getElementById("2_1").innerText=="X" && document.getElementById("2_0").innerText==""){
+          document.getElementById("2_0").innerHTML="O"
+          
+          generatedefenceword()
+      }
+      else if (document.getElementById("2_2").innerText=="X" && document.getElementById("2_0").innerText=="X" && document.getElementById("2_1").innerText==""){
+          document.getElementById("2_1").innerHTML="O"
+          
+          generatedefenceword()
+      }
+      else{
+          ai()
+          
+      }
+      
+  } 
+  function aioffence(){
+      //checks the \ line 
+      if (document.getElementById("0_0").innerText=="O" && document.getElementById("1_1").innerText=="O" && document.getElementById("2_2").innerText==""){
+          document.getElementById("2_2").innerHTML="O"
+      
+          generateoffenceword()
+      }
+      else if (document.getElementById("2_2").innerText=="O" && document.getElementById("1_1").innerText=="O" && document.getElementById("0_0").innerText==""){
+          document.getElementById("0_0").innerHTML="O"
+      
+          generateoffenceword()
+      }
+      else if (document.getElementById("0_0").innerText=="O" && document.getElementById("2_2").innerText=="O" && document.getElementById("1_1").innerText==""){
+          document.getElementById("1_1").innerHTML="O"
+      
+          generateoffenceword()
+      }
+      //checks the / line 
+      else if (document.getElementById("2_0").innerText=="O" && document.getElementById("1_1").innerText=="O" && document.getElementById("0_2").innerText==""){
+          document.getElementById("0_2").innerHTML="O"
+      
+          generateoffenceword()
+      }
+      else if (document.getElementById("0_2").innerText=="O" && document.getElementById("1_1").innerText=="O" && document.getElementById("2_0").innerText==""){
+          document.getElementById("2_0").innerHTML="O"
+      
+          generateoffenceword()
+      }
+      else if (document.getElementById("0_2").innerText=="O" && document.getElementById("2_0").innerText=="O" && document.getElementById("1_1").innerText==""){
+          document.getElementById("1_1").innerHTML="O"
+      
+          generateoffenceword()
+      }
+      else if (document.getElementById("0_0").innerText=="O" && document.getElementById("1_0").innerText=="O" && document.getElementById("2_0").innerText==""){
+          document.getElementById("2_0").innerHTML="O"
+          generateoffenceword()
+      }
+      else if (document.getElementById("2_0").innerText=="O" && document.getElementById("1_0").innerText=="O" && document.getElementById("0_0").innerText==""){
+          document.getElementById("0_0").innerHTML="O"
+          generateoffenceword()
+      }
+      else if (document.getElementById("0_0").innerText=="O" && document.getElementById("2_0").innerText=="O" && document.getElementById("1_0").innerText==""){
+          document.getElementById("1_0").innerHTML="O"
+      
+          generateoffenceword()
+      }
+      //checks the second line horizontally
+      else if (document.getElementById("0_1").innerText=="O" && document.getElementById("1_1").innerText=="O" && document.getElementById("2_1").innerText==""){
+          document.getElementById("2_1").innerHTML="O"
+      
+          generateoffenceword()
+      }
+      else if (document.getElementById("2_1").innerText=="O" && document.getElementById("1_1").innerText=="O" && document.getElementById("0_1").innerText==""){
+          document.getElementById("0_1").innerHTML="O"
+      
+          generateoffenceword()
+      }
+      else if (document.getElementById("0_1").innerText=="O" && document.getElementById("2_1").innerText=="O" && document.getElementById("1_1").innerText==""){
+          document.getElementById("1_1").innerHTML="O"
+      
+          generateoffenceword()
+      }
+      //checks the third line horizontally
+      else if (document.getElementById("0_2").innerText=="O" && document.getElementById("1_2").innerText=="O" && document.getElementById("2_2").innerText==""){
+          document.getElementById("2_2").innerHTML="O"
+      
+          generateoffenceword()
+      }
+      else if (document.getElementById("1_2").innerText=="O" && document.getElementById("2_2").innerText=="O" && document.getElementById("0_2").innerText==""){
+          document.getElementById("0_2").innerHTML="O"
+      
+          generateoffenceword()
+      }
+      else if (document.getElementById("0_2").innerText=="O" && document.getElementById("2_2").innerText=="O" && document.getElementById("1_2").innerText==""){
+          document.getElementById("1_2").innerHTML="O"
+      
+          generateoffenceword()
+      }
+      //checks the first line vertically  
+      else if (document.getElementById("0_0").innerText=="O" && document.getElementById("0_1").innerText=="O" && document.getElementById("0_2").innerText==""){
+          document.getElementById("0_2").innerHTML="O"
+      
+          generateoffenceword()
+      }
+      else if (document.getElementById("0_2").innerText=="O" && document.getElementById("0_1").innerText=="O" && document.getElementById("0_0").innerText==""){
+          document.getElementById("0_0").innerHTML="O"
+      
+          generateoffenceword()
+      }
+      else if (document.getElementById("0_0").innerText=="O" && document.getElementById("0_2").innerText=="O" && document.getElementById("0_1").innerText==""){
+          document.getElementById("0_1").innerHTML="O"
+      
+          generateoffenceword()
+      }
+      //checks the second line vertically
+      else if (document.getElementById("1_0").innerText=="O" && document.getElementById("1_1").innerText=="O" && document.getElementById("1_2").innerText==""){
+          document.getElementById("1_2").innerHTML="O"
+      
+          generateoffenceword()
+      }
+      else if (document.getElementById("1_2").innerText=="O" && document.getElementById("1_1").innerText=="O" && document.getElementById("1_0").innerText==""){
+          document.getElementById("1_0").innerHTML="O"
+      
+          generateoffenceword()
+      }
+      else if (document.getElementById("1_2").innerText=="O" && document.getElementById("1_0").innerText=="O" && document.getElementById("1_1").innerText==""){
+          document.getElementById("1_1").innerHTML="O"
+      
+          generateoffenceword()
+      }
+      //checks the third line vertically 
+      else if (document.getElementById("2_0").innerText=="O" && document.getElementById("2_1").innerText=="O" && document.getElementById("2_2").innerText==""){
+          document.getElementById("2_2").innerHTML="O"
+      
+          generateoffenceword()
+      }
+      else if (document.getElementById("2_2").innerText=="O" && document.getElementById("2_1").innerText=="O" && document.getElementById("2_0").innerText==""){
+          document.getElementById("2_0").innerHTML="O"
+      
+          generateoffenceword()
+      }
+      else if (document.getElementById("2_2").innerText=="O" && document.getElementById("2_0").innerText=="O" && document.getElementById("2_1").innerText==""){
+          document.getElementById("2_1").innerHTML="O"
+      
+          generateoffenceword()
+      }
+      
+    else{
+        aicheckwin()
+    }
+
+  }
+  function ai(){
+      var randombox=Math.floor(Math.random()*10)
+      if (randombox=="0"){
+          ai()
+      }
+      else if (randombox=="10"){
+          ai()
+      }
+      else if (randombox=="1"){
+          if (document.getElementById("0_0").innerText==""){
+              document.getElementById("0_0").innerHTML="O"
+          }
+          else{
+              ai()
+          }
+      }
+      else if (randombox=="2"){
+          if (document.getElementById("0_1").innerText==""){
+              document.getElementById("0_1").innerHTML="O"
+          }
+          else{
+              ai()
+          }
+      }
+      else if (randombox=="3"){
+          if (document.getElementById("0_2").innerText==""){
+              document.getElementById("0_2").innerHTML="O"
+          }
+          else{
+              ai()
+          }
+      }
+      else if (randombox=="4"){
+          if (document.getElementById("1_0").innerText==""){
+              document.getElementById("1_0").innerHTML="O"
+          }
+          else{
+              ai()
+          }
+      }
+      else if (randombox=="5"){
+          if (document.getElementById("2_0").innerText==""){
+              document.getElementById("2_0").innerHTML="O"
+          }
+          else{
+              ai()
+          }
+      }
+       else if (randombox=="6"){
+          if (document.getElementById("1_1").innerText==""){
+              document.getElementById("1_1").innerHTML="O"
+          }
+          else{
+              ai()
+          }
+        
+        }
+         else if (randombox=="7"){
+          if (document.getElementById("1_2").innerText==""){
+              document.getElementById("1_2").innerHTML="O"
+          }
+          else{
+              ai()
+          }
+         }
+          else if (randombox=="8"){
+          if (document.getElementById("2_1").innerText==""){
+              document.getElementById("2_1").innerHTML="O"
+          }
+          else{
+              ai()
+          }
+          }
+          else if (randombox=="9"){
+          if (document.getElementById("2_2").innerText==""){
+              document.getElementById("2_2").innerHTML="O"
+          }
+          else{
+              ai()
+          }
+          }
+  }
+  var draw=0
+  function checkifdraw(){
+        checkGameBoard()
+        if (document.getElementById("0_0").innerText!="" && document.getElementById("1_0").innerText!="" && document.getElementById("2_0").innerText!="" && document.getElementById("0_1").innerText!="" && document.getElementById("1_1").innerText!="" && document.getElementById("2_1").innerText!="" && document.getElementById("0_2").innerText!="" && document.getElementById("1_0").innerText!="" && document.getElementById("2_2").innerText!="" && document.getElementById("1_2").innerText!="" &&  won != true && draw==0){
+            draw=1
+            alert("its a draw!!!(ai is better)")
+            var msgfordraw = document.createElement("p");
+            msgfordraw.innerHTML = "Ai:Its a draw, im still better tho";
+            document.getElementById("aisay").appendChild(msgfordraw);
+
+            
+        }
+        else {
+            
+        }
+    }
+  </script>
+</body>
+</html>
