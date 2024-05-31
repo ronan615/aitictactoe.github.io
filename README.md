@@ -1,2 +1,2 @@
-# aitictactoe.github.io
-Ai tic tac toe using js
+# algoctactoe.github.io
+Algo tic tac toe using js
